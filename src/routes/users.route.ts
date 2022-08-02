@@ -1,9 +1,10 @@
 import { Router , Request, Response, NextFunction} from "express";
+import userRepository from "../repositories/user.repository";
 
 const usersRoute = Router();
 
-usersRoute.get('/users',(req: Request,res: Response,next:NextFunction)=>{
-    const users: never[] = [];
+usersRoute.get('/users',async(req: Request,res: Response,next:NextFunction)=>{
+    const users = await userRepository.findAllUsers();
     res.json(users);
 })
 
