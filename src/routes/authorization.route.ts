@@ -1,17 +1,25 @@
 import { NextFunction, Request, Response, Router } from "express";
 import JWT from "jsonwebtoken";
 import basicAuthenticationMiddleware from "../middlewares/basic-authentication.middleware";
+import jwtAuthenticationMiddleware from "../middlewares/jwt-authenticarion.middleware";
 import ForbiddenError from "../models/errors/forbidden.error.model";
 
 
 const authorizationRoute = Router();
 
+authorizationRoute.post('/token/validate', jwtAuthenticationMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.sendStatus(200);
+    } catch (e) {
+        next(e);
+    }
+});
+
 authorizationRoute.post('/token', basicAuthenticationMiddleware, async (req: Request, res: Response, next: NextFunction) => {
 
     try {
         const user = req.user;
-
-        if(!user){
+        if (!user) {
             throw new ForbiddenError('Usuário não informado');
         }
 
