@@ -14,7 +14,7 @@ async function basicAuthenticationMiddleware(req: Request, res: Response, next: 
         const [authenticationType, token] = authorizationHeader.split(' ');
 
         if (authenticationType !== 'Basic' || !token) {
-            throw new ForbiddenError('Modo autenticação inválida');
+            throw new ForbiddenError('Tipo de autenticação inválida');
         }
 
         const tokenContent = Buffer.from(token, 'base64').toString('utf-8');
