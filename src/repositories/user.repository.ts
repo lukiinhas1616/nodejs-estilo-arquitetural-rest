@@ -1,6 +1,6 @@
 import db from "../db";
 import User from "../models/user.model";
-import DatabaseError  from "../models/errors/database.error.model";
+import DatabaseError from "../models/errors/database.error.model";
 
 class UserRepository {
     async findAllUsers(): Promise<User[]> {
@@ -27,7 +27,25 @@ class UserRepository {
             const [user] = rows;
             return user;
         } catch (e) {
-            throw new DatabaseError('Erro na consulta por ID',e);
+            throw new DatabaseError('Erro na consulta por ID', e);
+        }
+    }
+
+    async findByEmailAndPassword(email: string, password: string): Promise<User> {
+        try {
+            const query = `
+                SELECT uuid, email
+                FROM application_user
+                WHERE email = $1 AND password = crypt($2,'eleviisimaw123456789')
+            `;
+
+            const values = [email,password];
+            const {rows} = await db.query(query,values);
+            const [user] = rows;
+            return user;
+
+        } catch (e) {
+            throw new DatabaseError('Erro na consulta por e-mail e senha', e);
         }
     }
 
